@@ -15,6 +15,5 @@ namespace UserManagment.App.Service.Interface
         Task<List<TodoEntity>> GetUserTodos(int userId);
         Task<List<CommentEntity>> GetUserComments(int userId);
         Task<List<AlbumEntity>> GetUserAlbums(int userId);
-        Task<UserProfile> GetUserData(int userId);
     }
 }

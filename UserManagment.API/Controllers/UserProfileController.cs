@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using UserManagment.App.Models.Requests;
 using UserManagment.App.Service.Interface;
-using UserManagment.Data.Db.Entities;
 
 namespace UserManagment.API.Controllers
 {
@@ -26,7 +25,7 @@ namespace UserManagment.API.Controllers
             return Ok(user);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut("update-profile")]
         public async Task<IActionResult> UpdateUserProfile(UpdateUserProfileRequest request)
         {
@@ -34,66 +33,56 @@ namespace UserManagment.API.Controllers
             return Ok(update);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("view-profile")]
         public async Task<IActionResult> ViewUserProfile(int userId)
         {
             var user = await _userProfileService.GetUserProfileByUserId(userId);
-
             return Ok(user);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("get-posts")]
         public async Task<IActionResult> ViewPosts(int userId)
         {
-                var userData = await _userProfileService.GetUserData(userId);
-                var posts = userData.Posts;
-
-                return Ok(posts);
+            var userData = await _userProfileService.GetUserPosts(userId);
+            return Ok(userData);
         }
 
         [Authorize]
         [HttpGet("get-photos")]
         public async Task<IActionResult> ViewPhotos(int userId)
         {
-            var userData = await _userProfileService.GetUserData(userId);
-            var photo = userData.Photos;
-
-            return Ok(photo);
+            var userData = await _userProfileService.GetUserPhotos(userId);
+            return Ok(userData);
         }
 
-        [Authorize]
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("get-comments")]
         public async Task<IActionResult> ViewComments(int userId)
         {
-            var userData = await _userProfileService.GetUserData(userId);
-            var comments = userData.Comments;
-
-            return Ok(comments);
+            var userData = await _userProfileService.GetUserComments(userId);
+            return Ok(userData);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("get-todos")]
         public async Task<IActionResult> ViewTodos(int userId)
         {
-            var userData = await _userProfileService.GetUserData(userId);
-            var todos = userData.Todos;
-
-            return Ok(todos);
+            var userData = await _userProfileService.GetUserTodos(userId);
+            return Ok(userData);
         }
-        
-        [Authorize]
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("get-albums")]
         public async Task<IActionResult> ViewAlbums(int userId)
         {
-            var userData = await _userProfileService.GetUserData(userId);
-            var todos = userData.Albums;
-
-            return Ok(todos);
+            var userData = await _userProfileService.GetUserAlbums(userId);
+            return Ok(userData);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpDelete("delete-user-profile")]
         public async Task<IActionResult> DeleteUser(DeleteUserProfileRequest request)
         {

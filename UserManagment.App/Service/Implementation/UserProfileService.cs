@@ -80,7 +80,7 @@ namespace UserManagment.App.Service.Implementation
                 postsResponse.EnsureSuccessStatusCode();
                 var postsResponseBody = await postsResponse.Content.ReadAsStringAsync();
 
-                if (string.IsNullOrEmpty(postsResponseBody))
+                if (string.IsNullOrEmpty(postsResponseBody) || postsResponseBody == "[]")
                 {
                     throw new Exception("Record not found");
                 }
@@ -93,7 +93,7 @@ namespace UserManagment.App.Service.Implementation
                     commentsResponse.EnsureSuccessStatusCode();
                     var commentsResponseBody = await commentsResponse.Content.ReadAsStringAsync();
 
-                    if (!string.IsNullOrEmpty(commentsResponseBody))
+                    if (!string.IsNullOrEmpty(commentsResponseBody) && commentsResponseBody != "[]")
                     {
                         var comments = JsonConvert.DeserializeObject<List<CommentEntity>>(commentsResponseBody);
                         post.Comments = comments!;
@@ -112,7 +112,7 @@ namespace UserManagment.App.Service.Implementation
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
 
-                if (string.IsNullOrEmpty(responseBody))
+                if (string.IsNullOrEmpty(responseBody) || responseBody == "[]")
                 {
                     throw new Exception("Record not found");
                 }
@@ -130,7 +130,7 @@ namespace UserManagment.App.Service.Implementation
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
 
-                if (string.IsNullOrEmpty(responseBody))
+                if (string.IsNullOrEmpty(responseBody) || responseBody == "[]")
                 {
                     throw new Exception("Record not found");
                 }
@@ -148,7 +148,7 @@ namespace UserManagment.App.Service.Implementation
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
 
-                if (string.IsNullOrEmpty(responseBody))
+                if (string.IsNullOrEmpty(responseBody) || responseBody == "[]")
                 {
                     throw new Exception("Record not found");
                 }
@@ -166,7 +166,7 @@ namespace UserManagment.App.Service.Implementation
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
 
-                if (string.IsNullOrEmpty(responseBody))
+                if (string.IsNullOrEmpty(responseBody) || responseBody == "[]")
                 {
                     throw new Exception("Record not found");
                 }
@@ -194,33 +194,6 @@ namespace UserManagment.App.Service.Implementation
             };
 
             return userProfile;
-        }
-
-        public async Task<UserProfile> GetUserData(int userId)
-        {
-            UserProfileEntity userProfile = await _userProfileRepository.GetUserProfileByUserId(userId);
-
-            if (userProfile == null)
-            {
-                throw new Exception("Record not found");
-            }
-
-            List<PostEntity> posts = await GetUserPosts(userId);
-            List<PhotoEntity> photos = await GetUserPhotos(userId);
-            List<TodoEntity> todos = await GetUserTodos(userId);
-            List<CommentEntity> comments = await GetUserComments(userId);
-            List<AlbumEntity> album = await GetUserAlbums(userId);
-
-            UserProfile userData = new UserProfile
-            {
-                Comments = comments,
-                Posts = posts,
-                Photos = photos,
-                Todos = todos,
-                Albums = album
-            };
-
-            return userData;
         }
 
         public async Task RemoveUserProfile(DeleteUserProfileRequest request)
